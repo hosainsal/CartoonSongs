@@ -1,0 +1,479 @@
+﻿
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>حكاياتي - הספר המנגן</title>
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-surface": "#161c27",
+                        "primary-container": "#7058d0",
+                        "on-surface-variant": "#484553",
+                        "surface-container": "#e8eeff",
+                        "outline": "#797584",
+                        "primary": "#573eb6",
+                        "on-primary-container": "#f2ebff",
+                    },
+                    spacing: {
+                        "lg": "40px",
+                        "md": "24px",
+                        "sm": "12px",
+                        "xs": "4px",
+                        "xl": "64px"
+                    },
+                    fontFamily: {
+                        "label-sm": ["Cairo", "Plus Jakarta Sans", "sans-serif"],
+                        "headline-md": ["Cairo", "Plus Jakarta Sans", "sans-serif"],
+                        "body-lg": ["Cairo", "Plus Jakarta Sans", "sans-serif"],
+                        "body-md": ["Cairo", "Plus Jakarta Sans", "sans-serif"],
+                        "headline-lg": ["Cairo", "Plus Jakarta Sans", "sans-serif"]
+                    },
+                    fontSize: {
+                        "label-sm": ["13px", { lineHeight: "1.4", fontWeight: "600" }],
+                        "headline-md": ["24px", { lineHeight: "1.3", fontWeight: "700" }],
+                        "body-lg": ["18px", { lineHeight: "1.8", fontWeight: "600" }],
+                        "body-md": ["16px", { lineHeight: "1.6", fontWeight: "500" }],
+                        "headline-lg": ["32px", { lineHeight: "1.2", fontWeight: "800" }]
+                    }
+                },
+            },
+        }
+    </script>
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #e6deff 0%, #f9f9ff 50%, #c6e7ff 100%);
+            min-height: max(884px, 100dvh);
+            background-attachment: fixed;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Glassmorphism Styles */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 8px 32px rgba(112, 88, 208, 0.08);
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 4px 24px rgba(112, 88, 208, 0.1);
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        /* Custom Scrollbar */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(112, 88, 208, 0.2);
+            border-radius: 10px;
+        }
+
+            .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+                background: rgba(112, 88, 208, 0.4);
+            }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* SPA Transitions */
+        .view-section {
+            display: none;
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+
+            .view-section.active {
+                display: block;
+            }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Play Animation */
+        @keyframes pulseGlow {
+            0% {
+                transform: scale(0.9) translateY(16px);
+                opacity: 0.3;
+            }
+
+            50% {
+                transform: scale(1.05) translateY(16px);
+                opacity: 0.7;
+            }
+
+            100% {
+                transform: scale(0.9) translateY(16px);
+                opacity: 0.3;
+            }
+        }
+
+        .playing-glow {
+            animation: pulseGlow 2s infinite ease-in-out !important;
+        }
+    </style>
+</head>
+<body class="font-body-md text-on-surface">
+
+    <!-- ========================================== -->
+    <!-- SCREEN B: LIBRARY / HOME                   -->
+    <!-- ========================================== -->
+    <div id="library-view" class="view-section active">
+        <!-- TopAppBar -->
+        <header class="fixed top-0 left-0 right-0 z-50 glass-panel border-b border-white/40">
+            <div class="flex justify-center items-center w-full px-6 py-4">
+                <h1 class="font-bold text-2xl text-violet-700">حكاياتي</h1>
+            </div>
+        </header>
+
+        <main class="pt-24 pb-12 px-md">
+            <!-- Hero Section -->
+            <div class="mb-lg text-center">
+                <h2 class="font-headline-lg text-headline-lg text-primary-container mb-xs">المكتبة السحرية</h2>
+                <p class="font-body-md text-body-md text-on-surface-variant opacity-80">اكتشف عالم الألحان والقصص</p>
+            </div>
+
+            <!-- Bento Grid -->
+            <div id="songs-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-md max-w-7xl mx-auto">
+                <!-- Cards will be injected here via JavaScript -->
+            </div>
+        </main>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- SCREEN A: SONG PLAYER / DEEP LINK          -->
+    <!-- ========================================== -->
+    <div id="song-view" class="view-section">
+        <!-- TopAppBar -->
+        <header class="fixed top-0 left-0 w-full z-50 glass-panel border-b border-white/40">
+            <div class="flex justify-between items-center w-full px-6 py-4 rtl">
+                <div class="flex items-center gap-2">
+                    <button onclick="navigateHome()" class="w-[48px] h-[48px] flex items-center justify-center text-violet-600 hover:opacity-80 active:scale-95 transition-all bg-white/30 rounded-full">
+                        <span class="material-symbols-outlined text-2xl">arrow_forward</span>
+                    </button>
+                </div>
+                <h1 id="player-title" class="font-bold text-lg text-violet-700 truncate max-w-[200px]">عنوان الأغنية</h1>
+                <div class="flex items-center gap-2">
+                    <div class="w-[48px] h-[48px]"></div> <!-- Placeholder for symmetry -->
+                </div>
+            </div>
+        </header>
+
+        <main class="pt-24 pb-24 px-md flex flex-col items-center gap-8 max-w-2xl mx-auto min-h-screen">
+
+            <!-- Central 3D Illustration -->
+            <div class="relative w-full aspect-square max-w-[280px] group mt-4 shrink-0">
+                <div id="player-glow" class="absolute inset-0 bg-primary-container/30 rounded-[40px] blur-3xl transform scale-90 translate-y-4 transition-all duration-700"></div>
+                <div class="relative w-full h-full glass-panel rounded-[40px] overflow-hidden p-3 shadow-xl">
+                    <img id="player-img" class="w-full h-full object-cover rounded-[32px] transition-transform duration-700 hover:scale-105" src="" alt="Song Illustration" />
+                </div>
+            </div>
+
+            <!-- Audio Player Controls -->
+            <div id="audio-controls-container" class="w-full flex flex-col gap-6 shrink-0 px-4">
+                <!-- Progress Bar -->
+                <div class="w-full flex flex-col gap-2">
+                    <div id="progress-container" class="relative h-4 w-full bg-surface-container rounded-full overflow-hidden cursor-pointer shadow-inner" onclick="seek(event)">
+                        <div id="progress-bar" class="absolute left-0 top-0 h-full w-[0%] bg-primary-container rounded-full transition-all duration-100 ease-linear"></div>
+                        <div id="progress-head" class="absolute top-1/2 -translate-y-1/2 w-5 h-5 bg-white border-[3px] border-primary-container rounded-full shadow-md transition-all duration-100 ease-linear" style="right: 0%;"></div>
+                    </div>
+                    <div class="flex justify-between px-1" dir="ltr">
+                        <span id="time-current" class="text-label-sm text-outline font-mono">00:00</span>
+                        <span id="time-total" class="text-label-sm text-outline font-mono">00:00</span>
+                    </div>
+                </div>
+
+                <!-- Player Buttons -->
+                <div class="flex items-center justify-center gap-xl">
+                    <button onclick="skip(-10)" class="w-[48px] h-[48px] flex items-center justify-center text-primary-container hover:opacity-80 active:scale-95 transition-all">
+                        <span class="material-symbols-outlined text-3xl">replay_10</span>
+                    </button>
+
+                    <button onclick="togglePlay()" id="btn-play" class="w-20 h-20 bg-primary-container text-white rounded-full flex items-center justify-center shadow-[0_12px_24px_rgba(112,88,208,0.3)] hover:scale-105 active:scale-90 transition-transform">
+                        <span id="icon-play" class="material-symbols-outlined text-5xl" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+                    </button>
+
+                    <button onclick="skip(10)" class="w-[48px] h-[48px] flex items-center justify-center text-primary-container hover:opacity-80 active:scale-95 transition-all">
+                        <span class="material-symbols-outlined text-3xl">forward_10</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- No Audio Message (Hidden by default) -->
+            <div id="no-audio-message" class="hidden w-full flex-col items-center justify-center py-6 px-6 glass-panel rounded-3xl border-dashed border-2 border-primary/30 shrink-0">
+                <span class="material-symbols-outlined text-5xl text-primary/50 mb-3">music_off</span>
+                <p class="font-headline-md text-primary font-bold text-center mb-1">الأغنية غير متوفرة حالياً</p>
+            </div>
+
+            <!-- Lyrics Section -->
+            <section class="w-full pb-8">
+                <div class="glass-panel rounded-[32px] p-6 sm:p-8 shadow-sm h-auto">
+                    <h3 class="text-center text-primary font-headline-md mb-6">كلمات الأغنية</h3>
+                    <div id="player-lyrics" class="flex flex-col gap-5 text-center text-on-surface">
+                        <!-- Lyrics injected via JS -->
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- DATA SCRIPT (Can be moved to data.js)      -->
+    <!-- ========================================== -->
+    <script id="data-script">
+        const rawSongsData = [
+            {
+                id: 1,
+                title: "البؤساء",
+                audioUrl: "https://firebasestorage.googleapis.com/v0/b/singingbookapp.firebasestorage.app/o/%D8%A7%D9%84%D8%A8%D8%A4%D8%B3%D8%A7%D8%A1.mp3?alt=media&token=4c30af44-e5f5-4040-a6ff-a546ed005d26",
+                imageUrl: "https://firebasestorage.googleapis.com/v0/b/singingbookapp.firebasestorage.app/o/kidssongs%2F%D8%A7%D9%84%D8%A8%D8%A4%D8%B3%D8%A7%D8%A1.png?alt=media&token=39863c04-58e6-487f-8e0e-ee2d367d9eb4",
+                lyrics: `حلمت حلما في زمااان..ماكان عندها مستحيلاااا\nبحب من دون أثمااان..وللمغفره ألف وسيلاااا\nحلمت في ريعان الشباااب..ماكان فيه للخوف مكاناااا\nلم تغلق فيه الأبواااب..والقسم يكفينا برهاناااا\nثم حل ظلام الليييل..بأطياف تطفوا سوداااااء\nتجرف أيامي كالسيل..وقصر أحلامي انهدَا آ آ آ\nقد يبدوا بجانبي مرتاااح..حلمي وقد يهز سريري\nيرسم لحريتي جناااح..يشعل شمعا ينير مصيري`
+            },
+            {
+                id: 2,
+                title: "الحديقة السرية",
+                audioUrl: "https://firebasestorage.googleapis.com/v0/b/singingbookapp.firebasestorage.app/o/%D8%A7%D9%84%D8%AD%D8%AF%D9%8A%D9%82%D8%A9%20%D8%A7%D9%84%D8%B3%D8%B1%D9%8A%D8%A9.mp3?alt=media&token=87fd1710-ac42-4772-852a-d651cae5ee66",
+                imageUrl: "https://firebasestorage.googleapis.com/v0/b/singingbookapp.firebasestorage.app/o/kidssongs%2F%D8%A7%D9%84%D8%AD%D8%AF%D9%8A%D9%82%D8%A9%20%D8%A7%D9%84%D8%B3%D8%B1%D9%8A%D8%A9.png?alt=media&token=733ed2a5-89c0-4106-a3e1-e6e070bba17c",
+                lyrics: `في يوم همست في أذني\nمن يمسح عن قلبي حزني\nيرجعني خضراء اللون\nاعشاشا للاطيار\nفي يوم همست في أذني\nمن يمسح عن قلبي حزني\nيرجعني خضراء اللون\nاعشاشا للاطيار\nلحديقتنا\nفي قريتنا باب\nولها اسوار\nلا يعلم احد ما فيها\nتخفي عنا الاسراااار\nاقبلت بجد اسقيها\nاروي الاشجار احييها\nوغدا من أجمل ما فيها\nزهر لا كلازهار\nلحديقتنا\nفي قريتنا باب\nولها اسوار\nلا يعلم احد ما فيها\nتخفي عنا الاسرار\nما اجمل ان تسقي الشجرة\nلتضاهي في الحسن القمرا\nان تغرس في اليائس املا\nزرعا يعطي الاثمار\nلحديقتنا\nفي قريتنا باب\nولها اسوار\nلا يعلم احد ما فيها\nتخفي عنا الاسرار\nلحديقتنا\nفي قريتنا باب\nولها اسوار\nلا يعلم احد ما فيها\nتخفي عنا الاسرار`
+            },
+            {
+                id: 3,
+                title: "السنافر",
+                audioUrl: "https://firebasestorage.googleapis.com/v0/b/singingbookapp.firebasestorage.app/o/%D8%B4%D8%A7%D8%B1%D8%A9%20%D8%A7%D9%84%D8%B3%D9%86%D8%A7%D9%81%D8%B1.mp3?alt=media&token=51b66292-9fb0-4678-9c4a-3f9435d3835c",
+                imageUrl: "https://firebasestorage.googleapis.com/v0/b/singingbookapp.firebasestorage.app/o/kidssongs%2F%D8%A7%D9%84%D8%B3%D9%86%D8%A7%D9%81%D8%B1.png?alt=media&token=f491390a-1a87-4673-901e-2108d50b30fd",
+                lyrics: `الغابة عرس وبشائر ومروج خضر وضلال\nفيها أشجار وسنافر تفرح بالأطفال\nالغابة عرس وبشائر ومروج خضر وضلال\nفيها أشجار وسنافر تفرح بالأطفال\nيــا أطفااااال\nخلو الغابة تفرح\nخلوا الغابة تفرح\nالغابه خضراااء\nوسنافرها خير وعطاء\nوسنافرها خير وعطااااء\nتملؤها حبا وجمال\nلا تؤذوها .... واحبوها\nفهي تحب الاطفال`
+            },
+            {
+                id: 4,
+                title: "السيدة ملعقة",
+                audioUrl: "",
+                imageUrl: "https://firebasestorage.googleapis.com/v0/b/singingbookapp.firebasestorage.app/o/kidssongs%2F%D8%A7%D9%84%D8%B3%D9%8A%D8%AF%D8%A9%20%D9%85%D9%84%D8%B9%D9%82%D8%A9.png?alt=media&token=f6722ecd-709b-4d8d-a88a-037e36f5b4f5",
+                lyrics: `في جعبتي حكاية\nأحكيها.. تموج بالألوان\nحكايات أرويها\nعن عالم فتان\nعن عالم الخيال.. المليء بالجمال\nفي جعبتي حكاية.. أرويها للأطفال\nسيدةٌ ملعقة..\nتختفي.. تعود..\nفي جعبتي حكاية.. أرويها للأطفال\nفي جعبتي حكاية.. أرويها للأطفال`
+            },
+            {
+                id: 5,
+                title: "القناص",
+                audioUrl: "https://firebasestorage.googleapis.com/v0/b/singingbookapp.firebasestorage.app/o/kanas.mp3?alt=media&token=1fd8e2bf-6768-4f96-9075-91be276ef6ed",
+                imageUrl: "https://firebasestorage.googleapis.com/v0/b/singingbookapp.firebasestorage.app/o/kidssongs%2F%D8%A7%D9%84%D9%82%D9%86%D8%A7%D8%B5.png?alt=media&token=f8183406-b79b-4904-9bd4-d5f6cf6ee83b",
+                lyrics: `قد لمعت عيناه\nبالعزم انتفضت يمناه\nفي هدوء اللّيل\nمن هو الصّامد المغامر\nفيه وجه السّيل\nيبعد عن عينيه الرّاحة\nيتحدّى خصمًا في السّاحة\nيرمي ويصيب الأهداف\nيسعى دومًا لتحقيق الإنصاف\nوخيال أبيه في الأحلام\nيوقظ في القلب الحسّاس\nحبّ الخير لكلّ النّاس\nمهما كان الثمن من الصّعاب\nسيظلّ البطل القنّاص\nبكلّ الصّبر والإخلاص\nيعمل باجتهاد\nوعلى أهبة الاستعداد\nيرمي ويصيب الأهداف\nيسعى دومًا لتحقيق الإنصاف`
+            },
+            {
+                id: 6,
+                title: "الكابتن ماجد",
+                audioUrl: "https://firebasestorage.googleapis.com/v0/b/singingbookapp.firebasestorage.app/o/majed.mp3?alt=media&token=9c6aaf12-68ae-41ec-9071-bd41ab67c04b",
+                imageUrl: "https://firebasestorage.googleapis.com/v0/b/singingbookapp.firebasestorage.app/o/kidssongs%2F%D8%A7%D9%84%D9%83%D8%A7%D8%A8%D8%AA%D9%86%20%D9%85%D8%A7%D8%AC%D8%AF.png?alt=media&token=71d4b135-f012-4da1-9166-06265d2c9037",
+                lyrics: `الكابتن ماجد\nنجم الملعب\nنجم رائع\nنجم حساس ومهذب\nيعرف أن اللعب مهارة\nفن تمرير متبادل\nيصنع أهدافا وأثارة\nبالتدريب المتواصل\nوالأخلاص مع الأخلاق\nتجعله النجم المحبوب\nتفتح للفوز الآفاق\nتأتي بالأمل المطلوب\nيعرف من أخطاء الغير\nكيف يكون اللعب الأفضل\nيعرف أيضا أن الصبر يصنع نجم الكرة الأول\nيلعب في حرص وتفان\nيرقى ويمرر ويسدد\nنجم متأن متعاون\nنجم خلاق متجدد`
+            },
+            {
+                id: 7,
+                title: "المحقق كونان",
+                audioUrl: "https://firebasestorage.googleapis.com/v0/b/singingbookapp.firebasestorage.app/o/konan.mp3?alt=media&token=606b4bb8-b4c6-4038-a1ae-91e38e9f85a3",
+                imageUrl: "https://firebasestorage.googleapis.com/v0/b/singingbookapp.firebasestorage.app/o/kidssongs%2F%D8%A7%D9%84%D9%85%D8%AD%D9%82%D9%82%20%D9%83%D9%88%D9%86%D8%A7%D9%86.png?alt=media&token=01a12112-bc47-4206-9475-6c612161d730",
+                lyrics: `يكتشف الغامض والمثير\nيستنتج بالعقل الكثير\nكونان الرجل الصغير\nيسعى دائما\nالمحقق كونان\nيبدو واثقاً\nيعمل جاهداً\nلايخشى المحن\nاااااه كونان كونان\nاسرع فالزمان\nيجري ياكونان\nكونان\nهيا ياكونان\nلالالالالا...لالالالالالالا\nااااه ياكونان كونان\nكونان ذكي ومن يجابه كونان\nكونان\nيرجع خائباً\nالمحقق كونان\nيبدو واثقاً\nيعمل جاهداً\nلايخشى المحن`
+            },
+            {
+                id: 8,
+                title: "المقاتل النبيل",
+                audioUrl: "https://firebasestorage.googleapis.com/v0/b/singingbookapp.firebasestorage.app/o/%D9%84%D9%85%D9%82%D8%A7%D8%AA%D9%84%20%D8%A7%D9%84%D9%86%D8%A8%D9%8A%D9%84.mp3?alt=media&token=68307df1-4b93-449b-aa67-e289a1781833",
+                imageUrl: "https://firebasestorage.googleapis.com/v0/b/singingbookapp.firebasestorage.app/o/kidssongs%2F%D8%A7%D9%84%D9%85%D9%82%D8%A7%D8%AA%D9%84%20%D8%A7%D9%84%D9%86%D8%A8%D9%8A%D9%84.png?alt=media&token=c033e299-f7ff-49f0-93ce-002416bad5a5",
+                lyrics: `تدريبنا فيه أدبٌ وأخلاق\nمن كل شرٍ أو ظلمٍ فيه انعتاق\nلو حسبتم أن القوة في التجبر والترهيب\nمن أكيرا هذا درس في التأديب\nتدريبنا حلمٌ صبرٌ وإصرار\nفالقوة في الحكمة وفي نبل الأفكار\nلو حسبتم أن استضعاف العجوز والصغير\nفيه قوة لكم فهذا خطأ كبير\nأكيرا يمضي ليقاوم أفعال الأشرار\nكي يبلغ غايته يمضي يملؤه الإصرار\nوالعدل لا يسمو إلا بجهود الأبطال\nتدريبنا فيه أدبٌ وأخلاق\nمن كل شرٍ أو ظلمٍ فيه انعتاق\nتدريبنا حلمٌ صبرٌ وإصرار\nفالقوةُ في الحكمة وفي نبل الأفكار`
+            },
+            {
+                id: 9,
+                title: "الهداف",
+                audioUrl: "https://firebasestorage.googleapis.com/v0/b/singingbookapp.firebasestorage.app/o/%D8%A7%D9%84%D9%87%D8%AF%D8%A7%D9%81.mp3?alt=media&token=84d14c53-79aa-42e4-b3ea-9f38f55401d0",
+                imageUrl: "https://firebasestorage.googleapis.com/v0/b/singingbookapp.firebasestorage.app/o/kidssongs%2F%D8%A7%D9%84%D9%87%D8%AF%D8%A7%D9%81.png?alt=media&token=47d500ed-6cba-4602-9371-25d0df48e600",
+                lyrics: `انا هداف انا هداف\nيلمع مثل النجم الساطع\nأهدافي أحلى الأهداف\nوفريقي كالأمل الطالع\nانا هداف انا هداف\nانا هداف انا هداف\nمن يتدرب باستمرار\nسوف يهز المرمى هز\nمن يتسلح بالإصرار\nسوف يحقق أروع فوز\nسوف يحقق أروع فوز\nانا هداف انا هداف\nاهتف اهتف يا جمهور\nشدو العزم وشدو الهمه\nاهتف لفريق منصور\nيسعى قدما نحو القمة\nيسعى قدما نحو القمة\nانا هداف انا هداف\nنحن فريق عقد العزم\nالا يهزم الا يهزم\nحتى يصبح منذ اليوم\nنجم الكرة ونجم الملعب\nنجم الكرة ونجم الملعب`
+            },
+            {
+                id: 10,
+                title: "أليس في بلاد العجائب",
+                audioUrl: "https://firebasestorage.googleapis.com/v0/b/singingbookapp.firebasestorage.app/o/%D8%A3%D9%84%D9%8A%D8%B3%20%D9%81%D9%8A%20%D8%A8%D9%84%D8%A7%D8%AF%20%D8%A7%D9%84%D8%B9%D8%AC%D8%A7%D8%A6%D8%A8.mp3?alt=media&token=8caf34c2-58fd-4c95-b306-a8738bf5336d",
+                imageUrl: "https://firebasestorage.googleapis.com/v0/b/singingbookapp.firebasestorage.app/o/kidssongs%2F%D8%A3%D9%84%D9%8A%D8%B3%20%D9%81%D9%8A%20%D8%A8%D9%84%D8%A7%D8%AF%20%D8%A7%D9%84%D8%B9%D8%AC%D8%A7%D8%A6%D8%A8.png?alt=media&token=a4cde8b5-fa1c-4adc-8938-07fab30ceee9",
+                lyrics: `اليس يا فتاة\nبعمر الزهور\nتطير احلامها كالطيور\nاليس يا فتاة\nبعمر الزهور\nتطير احلامها كالطيور\nلأرض الجمال\nو ارض الغرائب\nودنيا الخيال\nبلاد العجائب\nاليس يا فتاة\nتحب الجميع و نور الحياة و زهر الربيع\nخذينا و طيري\nلدنيا الاثير\nالى رحلة حلوة ممتعة\nخذينا و طيري\nلدنيا الاثير\nو زوري بلاد العجائب زوري\nخذينا..خذينا..خذينااا`
+            },
+            {
+                id: 11,
+                title: "أنا وأخي",
+                audioUrl: "https://firebasestorage.googleapis.com/v0/b/singingbookapp.firebasestorage.app/o/%D8%A3%D9%86%D8%A7%20%20%D9%88%20%D8%A3%D8%AE%D9%8A.mp3?alt=media&token=1541363b-c8ea-426e-b14b-5392d3c7a8e4",
+                imageUrl: "https://via.placeholder.com/400x400/7058d0/ffffff?text=Image+11",
+                lyrics: `شوق يدفعني لأراها\nامي ذكرى لا أنساهاه\nطيف أنقى من زبد الأيام أبقى\nأمي ... أمي.. أمي\nهمساتها أحلى من ناي\nسكنت قلبي\nكلماتها باتت نجواي\nتضيئ دربي\nلاتنسى أخاك ترعاه يداك\nلوسرقت مني الأيام قلبا معطاءا بسام\nلن نستسلم للآلام ..لن نستسلم للآلام\nلا تنسى أخاك ترعاه يداك`
+            },
+            {
+                id: 12,
+                title: "بيل وسيباستيان",
+                audioUrl: "https://firebasestorage.googleapis.com/v0/b/singingbookapp.firebasestorage.app/o/bill.mp3?alt=media&token=ecff7637-45ea-48b3-bfc7-9d940c4c185d",
+                imageUrl: "https://firebasestorage.googleapis.com/v0/b/singingbookapp.firebasestorage.app/o/kidssongs%2F%D8%A8%D9%8A%D9%84%20%D9%88%D8%B3%D9%8A%D8%A8%D8%A7%D8%B3%D8%AA%D9%8A%D8%A7%D9%86.png?alt=media&token=e4caf598-769d-4581-a8fa-ace5b715a66c",
+                lyrics: `غنوا معنا (هيييي)، اهتفوا معنا (هيييي)\nيحيا يحيا الصديقان بيل وسيباستيان\nلا أحد يعلم من أين جاء بيل يسعى إلينا\nيوم لاقى سيبستيان سار معه في كل مكان\nما أوفاه (هيييي)، ما أحلاه (هيييي)\nبيل ينجح في كل ما يفعل، بيل وسيباستيان\nإن كنت في خطر داهم، يأتي بيل حالا إليك\nيُـنقذك ويدور حولك، إنه يخشى عليك\nفي السهول والتلال، في\nالحقول والمروج، (هيييي)\nيمضي بيل وقتا طويلا، باحثا بين الثلوج\nيُـنجد الضائعين، يرشد التائهين\nما أوفاه (هيييي)، ما أحلاه (هيييي)\nبيل ينجح في كل ما يفعل، بيل وسيباستيان\nغنوا معنا (هيييي)، اهتفوا معنا (هيييي)\nيحيا يحيا الصديقان بيل وسيباستيان.\n(هيييييي)`
+            },
+            {
+                id: 13,
+                title: "توم سوير",
+                audioUrl: "https://firebasestorage.googleapis.com/v0/b/singingbookapp.firebasestorage.app/o/tom%20swair.mp3?alt=media&token=3a7cf2e7-0748-4a25-9cde-adeed278c0b8",
+                imageUrl: "https://firebasestorage.googleapis.com/v0/b/singingbookapp.firebasestorage.app/o/kidssongs%2F%D8%AA%D9%88%D9%85%20%D8%B3%D9%88%D9%8A%D8%B1.png?alt=media&token=74c4dde4-bd95-4e20-880c-7937ff0c2b63",
+                lyrics: `امنية نطويها\nنُرجئُها نرميها\nنُغفلها نُخفيها\nننسى ما فيها\nننسى حتى الذكرى\nفوق دروب منسيّة\nتصبح ظلاً فِكرة\nبل أحلاماً ورديّة\nبين طواحين الأيام نخفي أمانينا\nنبحث عنها في الأحلام حين تنادينااا\nلن ندركها حين ننام بل ستجافينا\nنحسبها باتت أوهاماً وهي بأيدينا\nهيّا توم\nقِف وتأمل\nتوم\nمهلاً مهلا\nتوم\nلا تتعجل وتمهل فالقادم أحلى\nتوم\nِقِف وتأمل\nتوم\nمهلاً مهلا\nتوم\nلا تتعجل وتمهل فالقادم أحلى\nالقادم أحلى\nالقادم أحلى`
+            },
+            {
+                id: 14,
+                title: "جزيرة الكنز",
+                audioUrl: "https://firebasestorage.googleapis.com/v0/b/singingbookapp.firebasestorage.app/o/kanz.mp3?alt=media&token=c351a705-3bc9-4f4c-809f-94987fd52bcb",
+                imageUrl: "https://firebasestorage.googleapis.com/v0/b/singingbookapp.firebasestorage.app/o/kidssongs%2F%D8%AC%D8%B2%D9%8A%D8%B1%D8%A9%20%D8%A7%D9%84%D9%83%D9%86%D8%B2.png?alt=media&token=b10ba2fd-77d2-4c84-ab0d-bae2c1cda82b",
+                lyrics: `ها نحن ذا على دروب كنزنا\nنسير معاً وامالنا تسير قبلنا\nمن غيرنا يقطع يوماً مثلنا\nدرباً خطيرة الى الجزيرة من غيرنا\nجزيرة عجيبة وكنزنا فيها\nدروبها غريبة فلنوافيها\nنخاف المخاطر لانها كثيره\nلكننا معاً وكنزنا في الجزيره`
+            },
+            {
+                id: 15,
+                title: "دروب ريمي",
+                audioUrl: "https://firebasestorage.googleapis.com/v0/b/singingbookapp.firebasestorage.app/o/%D8%A3%D8%BA%D9%86%D9%8A%D8%A9%20%D8%AF%D8%B1%D9%88%D8%A8%20%D8%B1%D9%8A%D9%85%D9%8A.mp3?alt=media&token=c91e31d4-4c3e-4729-92fc-8ead9a3a89e0",
+                imageUrl: "https://firebasestorage.googleapis.com/v0/b/singingbookapp.firebasestorage.app/o/kidssongs%2F%D8%AF%D8%B1%D9%88%D8%A8%20%D8%B1%D9%8A%D9%85%D9%8A.png?alt=media&token=ea40d7c4-0a7d-49b3-a01d-469a1afeb797",
+                lyrics: `أنتِ الأمان\nأنتِ الحنان\nمن تحت قدميك لنا الجنان\nعندما تضحكين\nتضحك الحياة\nتزهر الآمال في طريقنا\nنحس بالأمان\nأمي\nأمي\nأمي\nنبض قلبي\nنبع الحنان\nأنتِ الأمان\nأنتِ الحنان\nمن تحت قدميك لنا الجنان\nمن عطائك تخجلي\nابدا لم تتململي\nيا شمعة دربي\nيل بلسم الزمان\nأمي\nأمي\nأمي\nنبض قلبي\nنبع الحنان`
+            },
+            {
+                id: 16,
+                title: "زينة ونحول",
+                audioUrl: "https://firebasestorage.googleapis.com/v0/b/singingbookapp.firebasestorage.app/o/%D8%B2%D9%8A%D9%86%D8%A9%20%D9%88%D9%86%D8%AD%D9%88%D9%84.mp3?alt=media&token=1b89105c-f043-4da2-88aa-2d8a1acc0938",
+                imageUrl: "https://firebasestorage.googleapis.com/v0/b/singingbookapp.firebasestorage.app/o/kidssongs%2F%D8%B2%D9%8A%D9%86%D8%A9%20%D9%88%D9%86%D8%AD%D9%88%D9%84.png?alt=media&token=f71d7e63-4f6a-4ed0-9820-7618c578fa82",
+                lyrics: `من وردة لوردة تطير ...\nتجني العبير بين الحقول\nتلعب مع صديقها نحووول\n... و هي أسمها زيـنــة\nأنا زينة .. أنا زينة\n... وحدي في البساتين\nأنا زينة الجميلة ... أغدو في كل حين\nيا أحلى نحلة ... زينة\nتمضي برحلة .... زينة\nلاتتركينا يا ...... زينة`
+            },
+            {
+                id: 17,
+                title: "سابق ولاحق",
+                audioUrl: "https://firebasestorage.googleapis.com/v0/b/singingbookapp.firebasestorage.app/o/sabek.mp3?alt=media&token=0985709d-869e-4ebc-9676-cf8301274572",
+                imageUrl: "https://firebasestorage.googleapis.com/v0/b/singingbookapp.firebasestorage.app/o/kidssongs%2F%D8%B3%D8%A7%D8%A8%D9%82%20%D9%88%D9%84%D8%A7%D8%AD%D9%82.png?alt=media&token=4c4dc850-f730-4c61-b23f-34460735fce9",
+                lyrics: `آن الأوان\nالآن سنثبت أننا\nالأمهر في السباق بعزمنا\nالصعب هان\nوالفوز منا قد دنا\nبالإصرار حققنا المنى\nبالعمل حلمنا سار معنا ووصل\nوفي النهاية\nالصعب هااااااااان\nهيا سابق لا تتردد لا حق الفوز مؤكد لا\nلن يهزم أبدا من سعى بالإصرار\nسابق لا تتردد لا حق الفوز مؤكد لا\nلن يهزم أبدا من سعى نحو الانتصاااار`
+            },
+            {
+                id: 18,
+                title: "مغامرات ساسوكي",
+                audioUrl: "https://firebasestorage.googleapis.com/v0/b/singingbookapp.firebasestorage.app/o/sasoky.mp3?alt=media&token=dea0c84e-cee5-4393-a22d-bde88c848125",
+                imageUrl: "https://firebasestorage.googleapis.com/v0/b/singingbookapp.firebasestorage.app/o/kidssongs%2F%D8%B3%D8%A7%D8%B3%D9%88%D9%83%D9%8A.png?alt=media&token=9b278d92-5752-457f-a903-b9d55e8ee5bd",
+                lyrics: `**قم ضع يدك بيدي**\n**قم احمي غدك و غدي**\n**نفتدي ارضنا بالدماء نفتدي**\n**نقضي نقضي على الشرور و ننشر السلام**\n**نحيا بزهو و سرور في حب و وئام**\n**هيا بنا هيا بنا يا رفاق هيا يا اصحاب**\n**بعزمنا  وبأسنا نذلل الصعاب**\n**ساعدي ساعدك نساعد الجميع**\n**ساسوكي قوتك قوة الجميع**\n**نقضي بها على الأشرار و ننصر الاخيار**`
+            },
+            {
+                id: 19,
+                title: "سالي",
+                audioUrl: "https://firebasestorage.googleapis.com/v0/b/singingbookapp.firebasestorage.app/o/saly.mp3?alt=media&token=84f093ad-7375-479a-af85-67c335dd09ef",
+                imageUrl: "https://firebasestorage.googleapis.com/v0/b/singingbookapp.firebasestorage.app/o/kidssongs%2F%D8%B3%D8%A7%D9%84%D9%8A.png?alt=media&token=f35f3e68-ef6b-4fb3-a429-b1795fb55714",
+                lyrics: `أنا قصة إنسان\nأنا جرح الزمان\nأنا سالي سالي\nأنا قصة إنسان\nأنا جرح الزمان\nأنا سالي سالي\nأعيش في حنين\nلوقع المطر.. لضوء القمر.. ورسم المصير\nسالي سالي سالي\nسالي سالي سالي\nيانور الأمل الطالع\nبدل أحزان العمر\nكي نلمح نور الفجر كي نحلم مثل الزهر\nونغني نغني نغني\nسالي سالي سالي\nسالي سالي سالي`
+            },
+            {
+                id: 20,
+                title: "ساندي بل",
+                audioUrl: "https://firebasestorage.googleapis.com/v0/b/singingbookapp.firebasestorage.app/o/sandy.mp3?alt=media&token=62530a14-2c5a-42c3-b45e-f5277d7b6cb6",
+                imageUrl: "https://firebasestorage.googleapis.com/v0/b/singingbookapp.firebasestorage.app/o/kidssongs%2F%D8%B3%D8%A7%D9%86%D8%AF%D9%8A%20%D8%A8%D9%84.png?alt=media&token=bac46676-887f-453f-909b-08d86ff57388",
+                lyrics: `ساندي بل ساندي بل\nأنا اسمي ساندي بل\nأنا صوت محبة يناااادي\nويدعو لخير الكل\nاسافر في الازمان\nأعيييش في كل مكان\nبقلب كبير الايمان\nأحب الحياة واعمل\nبجد و باخلاص\nيتيمة لا اشكو لا اسال\nوأحب كل الناس\nساندي بل ساندي بل\nهلموا الي تعالوا\nأنا صوت محبة يناااادي\nويدعو لخير الكل`
+            },
+            {
+                id: 21,
+                title: "سنان",
+                audioUrl: "https://firebasestorage.googleapis.com/v0/b/singingbookapp.firebasestorage.app/o/%D8%B3%D9%86%D8%A7%D9%86%20%D9%8A%D8%A7%20%D8%B3%D9%86%D8%A7%D9%86.mp3?alt=media&token=5ab9e527-e665-4fef-8440-0e41b9b4c77d",
+                imageUrl: "https://firebasestorage.googleapis.com/v0/b/singingbookapp.firebasestorage.app/o/kidssongs%2F%D8%B3%D9%86%D8%A7%D9%86.png?alt=media&token=7d7de4ee-5ad0-4403-babd-fa1367411fc6",
+                lyrics: `سنان يا سنان يا أحلى\nالاصدقاء في الغابة الخضراء\nسنان يا سنان\nشعارك الوفا ياخير\nالاصدقاء ها نحن بانتظارك\nسنان يا سنان\nسنان يا سنان يا نفحة النسيم بطبعك الكريم\nسنان يا سنان\nورأيك الحكيم يا خير\nالاصدقاء ها نحن بانتظارك\nسنان يا سنان\nسنان يا سنان صديقنا\nالامين في غابة الحلوين\nسنان يا سنان\nالكل سالمين ياخير الاصدقاء\nها نحن بانتظارك\nسنان يا سنان`
+            },
+            {
+                id: 22,
+                title: "مغامرات سندباد",
+                audioUrl: "https://firebasestorage.googleapis.com/v0/b/singingbookapp.firebasestorage.app/o/sendebad.mp3?alt=media&token=a5029034-466f-41a5-a028-a186678907bc",
+                imageUrl: "https://firebasestorage.googleapis.com/v0/b/singingbookapp.firebasestorage.app/o/kidssongs%2F%D8%B3%D9%86%D8%AF%D8%A8%D8%A7%D8%AF.png?alt=media&token=d0207e38-c4ad-4d36-9c52-8f39931cfaf3",
+                lyrics: `أنا سندباد المغترب أبعد أبحر أقتربُ\nلا أهاب الموج أبدا حين يعلو ويضطربُ\nسندباد لا يخاف سيندبـــاد\nمهمها تكثر الأخطار ويبعد عن بغداد\nسندباد ما أقواه في كل البلاد\nتاجر مندفع بطل القصه من بغداد\nسندباد لا يخاف سيندبـــاد\nمهمها تكثر الأخطار ويبعد عن بغداد\nسندباد ما أقواه في كل البلاد\nتاجر مندفع بطل من بغداد`
+            },
+            {
+                id: 23,
+                title: "عدنان ولينا",
+                audioUrl: "https://firebasestorage.googleapis.com/v0/b/singingbookapp.firebasestorage.app/o/adnan.mp3?alt=media&token=da5c0654-ff04-4ea7-8887-09478fdba682",
+                imageUrl: "https://firebasestorage.googleapis.com/v0/b/singingbookapp.firebasestorage.app/o/kidssongs%2F%D8%B9%D8%AF%D9%86%D8%A7%D9%86%20%D9%88%D9%84%D9%8A%D9%86%D8%A7.png?alt=media&token=2eea7782-2478-450e-8c0c-ebd169b7a58b",
+                lyrics: `**عدنان و لينا**\n**عدنان ولينا**\n**عدنان و لينا**\n**جمعتك أماني ....جمعتكم أماني**\n**جمعتكم أماني ....جمعتكم أماني**\n**أماني حلوة ....حلوة**\n**حلوة وجميلة ....حلوة**\n**حلوة البرائة ....حلوة**\n**حلوة الصداقة ....حلوة**\n**حلوة وجميلة ....حلوة**\n**حلوة وجميلة**\n**عدنان عنوان ومحبة**\n**عدنان يتحدى الصعاب**\n**عدنان يتحدى الصعاب**\n**عدنان عدنان**\n**عدنان غالي**\n**عدنان عدنان**`
+            },
+            {
+                id: 24,
+                title: "عهد الأصدقاء",
+                audioUrl: "https://firebasestorage.googleapis.com/v0/b/singingbookapp.firebasestorage.app/o/%D8%B9%D9%87%D8%AF%20%D8%A7%D9%84%D8%A7%D8%B5%D8%AF%D9%82%D8%A7%D8%A1.mp3?alt=media&token=2ece1abf-af71-4231-9ace-5c1ed09eb32a",
+                imageUrl: "https://firebasestorage.googleapis.com/v0/b/singingbookapp.firebasestorage.app/o/kidssongs%2F%D8%B9%D9%87%D8%AF%20%D8%A7%D9%84%D8%A3%D8%B5%D8%AF%D9%82%D8%A7%D8%A1.png?alt=media&token=35171e51-f0bc-4ab5-8fd4-9e56ae13e0af",
+                lyrics: `حلمنا نهار .. نهارنا عمل\nنملك الخيار .. وخيارنا الأمل\nوتهدينا الحياة أضواءً في آخر النفق\nتدعونا كي ننسى ألماً عشناه\nنستسلم لكن لا .. ما دمنا أحياءً نرزق\nما دام الامل طريقا فسنحياه\nبيننا صديق لايعرف الكلل\nمخلص رقيق ان قال فعل\nروميو صديقي يحفظ عهد الاصدقاء\nيعرف كيف يجابه الايام\nروميو صديقي  علمنا معنى الوفاء\nعلــــــــمنــــــــا الا نخشى الآلام\nروميو صديقي يحفظ عهد الاصدقاء\nيعرف كيف يجابه الايام\nروميو صديقي علمنا معنى الوفاء\nعلــــــــمنــــــــا الا نخشى الآلام`
+            },
+            {
+                id: 25,
+                title: "فلونة",
+                audioUrl: "https://firebasestorage.googleapis.com/v0/b/singingbookapp.firebasestorage.app/o/%D8%A3%D8%BA%D9%86%D9%8A%D8%A9%20%D9%81%D9%84%D9%88%D9%86%D8%A9%20%D9%85%D9%83%D8%AA%D9%88%D8%A8%D8%A9.mp3?alt=media&token=7abb6ebe-e022-4fad-bd90-bf3335dee081",
+                imageUrl: "https://firebasestorage.googleapis.com/v0/b/singingbookapp.firebasestorage.app/o/kidssongs%2F%D9%81%D9%84%D9%88%D9%86%D8%A9.png?alt=media&token=eab6f7ee-d5d3-4395-9370-8b8b2032c964",
+                lyrics: `على جزيرة غريبة مثيرة\nاخذنا الموج و رسونا\nساروي قصتي انا و عائلتي\nروبنسون كروزو و اسمي فلونة\nفلونة انا اسمي فلونة\nيعرفني الموج و الشمس و الرمال\nفلونة\nنضيف لونا  يسحر دنيا باهية الجمال\nمن هذه الأرض وجدنا قوتنا\nبخيال و ايمان اشياء ابدعنا\nعلى جزيرة غريبة مثيرة\nاخذنا الموج و رسونا\nسأروي قصتي انا و عائلتي\nروبنسون كروزو و اسمي فلونة`
+            },
+            {
+                id: 26,
+                title: "لحن الحياة",
+                audioUrl: "https://firebasestorage.googleapis.com/v0/b/singingbookapp.firebasestorage.app/o/lahen.mp3?alt=media&token=2570b1bf-10ef-4beb-832b-6cf639b2cd18",
+                imageUrl: "https://firebasestorage.googleapis.com/v0/b/singingbookapp.firebasestorage.app/o/kidssongs%2F%D9%84%D8%AD%D9%86%20%D8%A7%D9%84%D8%AD%D9%8A%D8%A7%D8%A9.jpg?alt=media&token=62d89984-8173-414b-b7ec-4d4362ffc5dd",
+                lyrics: `في الدروب هيا نغني في المسارح والساحات\nفي الحقول هيا نغني ينطلق لحن الحياة\nهيا للافق البعيد ننشد اللحن الجديد\nفوق اسراب الغيوم نهدي اقمارا ونجوم\nصول مي ري دو دروب ومعاني\nري ربيع الاغنيات\nمي موسيقى واغاني\nفا فجر الذكريات\nصوتنا ملا الفضاء لم يزل فينا الوفاء\nسوف تبقى يا غناء لنغني نغني لحن الحياة`
+            },
+            {
+                id: 27,
+                title: "ليدي ليدي",
+                audioUrl: "https://firebasestorage.googleapis.com/v0/b/singingbookapp.firebasestorage.app/o/laidy.mp3?alt=media&token=41bec8d4-2432-457e-87db-94a414f4fda1",
+                imageUrl: "https://firebasestorage.googleapis.com/v0/b/singingbookapp.firebasestorage.app/o/kidssongs%2F%D9%84%D9%8A%D8%AF%D9%8A%20%D9%84%D9%8A%D8%AF%D9%8A.png?alt=media&token=fd495636-ace1-4833-9a44-c63e3088d5dc",
+                lyrics: `لـيـدي لـيـدي مـا أروعـهـا\nليـدي ليــدي هـيـا مـعهـا\nلـيـدي لـيـدي مـا أروعـهـا\nليـدي ليــدي هـيـا مـعهـا\nلـيدي من حسن و جمال\nتسموا نحو الافق الـرائـــع\nرحـلتهـا سحـر و خــيـال\nفـي أرجـاء الـكون الـواســع\nفـوق جـواد الـحـلـم الأبيض\nتـرحل معنا ليل نهـــــار\nبـيـن قـصـور الـدنـيـا تركض\nوتـغـرد مثل الأطـيــــار\nهـيــــا نـصـغـي لــحـكــــايـتـهــــا\nنـبــدء مــعـهـــــا ونتابعهااا\nلـنـهـايـتـهـا.... لـنـهـايـتــــها`
+            },
+            {
+                id: 28,
+                title: "هايدي",
+                audioUrl: "https://firebasestorage.googleapis.com/v0/b/singingbookapp.firebasestorage.app/o/haidy.mp3?alt=media&token=96f83884-b949-49db-8018-3c65c1d61e8a",
+                imageUrl: "https://firebasestorage.googleapis.com/v0/b/singingbookapp.firebasestorage.app/o/kidssongs%2F%D9%87%D8%A7%D9%8A%D8%AF%D9%8A.png?alt=media&token=45fbdddf-a0b1-401e-b79f-e2b26d67d813",
+                lyrics: `بين الزهور والتلال ..\nتحت النجوم والهلال\nعبر الطبيعة و الجمال\nحكاية تشابه الخيال\nحكاية بنت اسمها هايدي\nحكاية بنت اسمها هايدي\nعاشت حايتها بالحب والخير\nغنت للانسِ و الزهرِ و الطير\nهايدي الجميلة هايدي الكريمة\nهادي اليتيمة ..\nمثل نسيم الهواء .. هي للعليل دواء\nهي للجرح شفاء .. هي للصبح ضياء\nهايدي الجميلة هايدي الكريمة\nهايدي اليتيمة هايدي اليتيمة\nهايدي اليتيمة`
+            },
+            {
+                id: 29,
+                title: "هزيم الرعد",
+                audioUrl: "https://firebasestorage.googleapis.com/v0/b/singingbookapp.firebasestorage.app/o/%D9%87%D8%B2%D9%8A%D9%85%20%D8%A7%D9%84%D8%B1%D8%B9%D8%AF.mp3?alt=media&token=660570b8-e8fc-4f75-9510-ae6d39ec9c67",
+                imageUrl: "https://firebasestorage.googleapis.com/v0/b/singingbookapp.firebasestorage.app/o/kidssongs%2F%D9%87%D8%B2%D9%8A%D9%85%20%D8%A7%D9%84%D8%B1%D8%B9%D8%AF.png?alt=media&token=c71b738e-0f57-48bb-aa9f-35314e730999",
+                lyrics: `هزيم الرعد\nأبرقي أرعدي ابطالاً وعدوكِ أنبل وعدْ\nهزيمُ الرعدْ\nجاؤوكِ بصوتِ الحقّ الهادرِ كهزيم الرعدْ\nهزيمُ الرعدْ\nبسيوفٍ أقوى منْ نار عَرِفَتْ كيفَ الرّدْ\nهزيمُ الرعدْ\nماهنت ولن تهني بل من\najلك ثار اشتد\nهزيم الرعد\nهزيم الرعد هزيم الرعد\nهزيم الرعد هزيم الرعد\nهزيم الرعد هزيم الرعد\nهزيم الرعد هزيم الرعد\nما عاش الظالم يسبيك\nوفينا نفس يعد\nبحنيني بدمي افديك وروحي\nتنبت مجد هزيم الرعد\nهزيم الرعد هزيم الرعد\nهزيم الرعد هزيم الرعد\nهزيم الرعد هزيم الرعد\nهزيم الرعد هزيم الرعد\nابرقي ارعدي ابطالا وعدوك\nانبل وعد\nهزيم الرعد\nجاؤوك بصوت الحق الهادر\nكهزيم الرعد\nهزيم الرعد\nبسيوف اقوى من نار عرفت\nكيف الرد\nهزيم الرعد\nماهنت ولن تهني بل من اجلك ثار اشتد\nهزيم الرعد`
+            },
+
+        ];
+    </script>
+
+    <!-- ========================================== -->
+    <!-- APP LOGIC SCRIPT  -->
+    <!-- ========================================== -->
+    <script src="Javascript/songsJavaScript.js"></script>
+
+</body>
+</html>
